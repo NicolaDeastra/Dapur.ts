@@ -1,55 +1,53 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
+import { Text } from '@chakra-ui/react'
+import Head from 'next/head'
 
-import { Hero } from '../components/Hero'
-import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
+import Api from '@src/lib'
+import Hero from '@src/components/Hero'
+import { Container } from '@src/components/Container'
+import { Main } from '@src/components/Main'
+import CardGrid from '@src/components/CardGrid'
+import { Footer } from '@src/components/Footer'
 
-const Index = () => (
-  <Container height="100vh">
-    <Hero />
+export interface Recipe {
+  title?: string
+  thumb?: string
+  key?: string
+  times?: string
+  portion?: string
+  dificulty?: string
+  category?: string
+  tags?: string
+}
+
+interface PageProps {
+  recipes: Recipe[]
+  article: Recipe[]
+}
+
+export const getStaticProps = async () => {
+  const initialRecipe = await Api.getRecipe(1)
+  const recipes = initialRecipe.results.slice(0, 9)
+
+  const initialArticle = await Api.getArticle()
+  const article = initialArticle.results.slice(0, 9)
+
+  return { props: { recipes, article }, revalidate: 60 }
+}
+
+const Index = ({ recipes, article }: PageProps) => (
+  <Container height='100vh'>
+    <Head>
+      <title>Let's Start Cooking with Popular Recipe | Dapur</title>
+    </Head>
     <Main>
-      <Text>
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-        <Code>typescript</Code>.
-      </Text>
-
-      <List spacing={3} my={0}>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
+      <Hero />
+      <CardGrid title='Recipe' data={recipes} />
+      <CardGrid title='Article' data={article} />
     </Main>
 
-    <DarkModeSwitch />
     <Footer>
-      <Text>Next ❤️ Chakra</Text>
+      <Text>lol</Text>
     </Footer>
-    <CTA />
   </Container>
 )
 

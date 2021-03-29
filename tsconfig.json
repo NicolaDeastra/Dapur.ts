@@ -16,8 +16,20 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"]
+    }
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "src/theme/components/Box/index.js",
+    "src/theme/components/Button/index.js",
+    "src/theme/components/Link/index.js",
+    "src/theme/style.js",
+    "src/theme/index.ts"
+  ]
 }
